@@ -35,6 +35,7 @@ public class ST_SmartTank_RBSFSM : AITank
         stats.Add("attackingEnemyPlayer", false);
         stats.Add("attackingEnemyBase", false);
         stats.Add("inRangeOfEnemy", false);
+        stats.Add("tooCloseToEnemy", false);
 
         //flee rules
         stats.Add("lowAmmo", false);
@@ -73,11 +74,15 @@ public class ST_SmartTank_RBSFSM : AITank
 
     public override void AITankUpdate()
     {
-
+        //reset all the collectables
         stats["spottedFuel"] = false;
         stats["spottedAmmo"] = false;
         stats["spottedAmmo"] = false;
 
+        //Is low ammo
+        stats["lowAmmo"] = (GetAmmoLevel < 2) ? true : false;
+        //Is low fuel
+        stats["lowFuel"] = (GetFuelLevel < 40) ? true : false;
         // tank found
         stats["spottedEnemy"] = (GetAllTargetTanksFound.Count != 0 && GetAllTargetTanksFound.FirstOrDefault().Key != null) ? true : false;
         //enemy base found
@@ -87,9 +92,11 @@ public class ST_SmartTank_RBSFSM : AITank
         if(targetTankPosition != null)
         {
             stats["inRangeOfEnemy"] = (Vector3.Distance(transform.position, targetTankPosition.transform.position) < 25f) ? true : false;
+            stats["tooCloseToEnemy"] = (Vector3.Distance(transform.position, targetTankPosition.transform.position) < 5f) ? true : false;
         } else
         {
             stats["inRangeOfEnemy"] = false;
+            stats["tooCloseToEnemy"] = false;
         }
         
         //consumable found
