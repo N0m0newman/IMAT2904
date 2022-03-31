@@ -40,6 +40,8 @@ public class CollectState_FSM_ST : BaseState_FSM_TS
         AiTank_FSM.FuelCheck();
         AiTank_FSM.CollectableCheck();
 
+        AiTank_FSM.consumablePosition = AiTank_FSM.consumablesFound.FirstOrDefault().Key;
+
         if (AiTank_FSM.consumablesFound.Count > 0)
         {
             AiTank_FSM.MoveTowardsObject(AiTank_FSM.consumablePosition, 0.5f);

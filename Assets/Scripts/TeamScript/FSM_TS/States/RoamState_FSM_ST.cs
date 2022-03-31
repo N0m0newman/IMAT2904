@@ -49,19 +49,14 @@ public class RoamState_FSM_ST : BaseState_FSM_TS
             AiTank_FSM.RandomPath(0.25f);
             return null;
         }
-        else if (AiTank_FSM.HealthCheck() < 50 && AiTank_FSM.targetTanksFound.Count== 0 && AiTank_FSM.consumablesFound.Count !=0) //if you have less then 50 health and no enemies near by find health.
+        else if (AiTank_FSM.HealthCheck() < 50 && AiTank_FSM.consumablesFound.Count !=0) //if you have less and there is collecatbles near by go to it.
         {
             AiTank_FSM.consumablePosition = AiTank_FSM.consumablesFound.FirstOrDefault().Key;
             return typeof(CollectState_FSM_ST);
         }
         if (AiTank_FSM.FuelCheck()< 50) // fuel less then 50 find fuel.
         {
-            AiTank_FSM.consumablePosition = AiTank_FSM.consumablesFound.FirstOrDefault().Key;
-            return typeof(CollectState_FSM_ST);
-        }
-        if (AiTank_FSM.HealthCheck() < 50) // if th healf goes less then 50 enter the collecate state.
-        {
-            AiTank_FSM.consumablePosition = AiTank_FSM.consumablesFound.FirstOrDefault().Key;
+           
             return typeof(CollectState_FSM_ST);
         }
         if (AiTank_FSM.AmmoCheck() < 4)
