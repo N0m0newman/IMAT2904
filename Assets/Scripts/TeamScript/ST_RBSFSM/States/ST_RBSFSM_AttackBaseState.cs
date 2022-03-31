@@ -15,6 +15,7 @@ public class ST_RBSFSM_AttackBaseState : BaseState_FSM_TS
 
     public override Type StateEnter()
     {
+        Debug.Log("Attacking enemy Base");
         smartTank.stats["attackingEnemyBase"] = true;
         return null;
     }
@@ -35,19 +36,13 @@ public class ST_RBSFSM_AttackBaseState : BaseState_FSM_TS
         {
             if (smartTank.stats["lowAmmo"] != true)
             {
-                smartTank.FireTank(smartTank.basePosition);
-                smartTank.GetBasesFound();
-                if (Vector3.Distance(smartTank.transform.position, smartTank.targetTankPosition.transform.position) > 50f)
+                if(smartTank.stats["inRangeOfEnemyBase"])
                 {
-                    smartTank.stats["patroling"] = true;
-                    foreach (var item in smartTank.rules.Rules)
-                    {
-                        if (item.CheckRule(smartTank.stats) != null)
-                        {
-                            return item.CheckRule(smartTank.stats);
-                        }
-                    }
-                    return null;
+                    smartTank.FireTank(smartTank.basePosition);
+                    smartTank.stats["inRangeOfEnemyBase"] = false;
+                } else
+                {
+                    smartTank.FollowTarget(smartTank.basePosition.gameObject, 1f);
                 }
             }
             else
@@ -66,6 +61,8 @@ public class ST_RBSFSM_AttackBaseState : BaseState_FSM_TS
         }
         else
         {
+            smartTank.stats["attackingEnemyBase"] = false;
+
             smartTank.stats["patroling"] = true;
             foreach (var item in smartTank.rules.Rules)
             {

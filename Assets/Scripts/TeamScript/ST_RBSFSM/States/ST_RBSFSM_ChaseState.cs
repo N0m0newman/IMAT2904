@@ -14,6 +14,7 @@ public class ST_RBSFSM_ChaseState : BaseState_FSM_TS
 
     public override Type StateEnter()
     {
+        Debug.Log("Chasing Enemy Player");
         smartTank.stats["chasingEnemy"] = true;
         smartTank.targetTankPosition = null;
         smartTank.consumablePosition = null;
@@ -23,6 +24,7 @@ public class ST_RBSFSM_ChaseState : BaseState_FSM_TS
 
     public override Type StateExit()
     {
+        Debug.Log("stopped Chasing Enemy");
         smartTank.stats["chasingEnemy"] = false;
         return null;
     }
@@ -37,24 +39,24 @@ public class ST_RBSFSM_ChaseState : BaseState_FSM_TS
         if (smartTank.targetTanksFound.FirstOrDefault().Key != null)
         {
             smartTank.GetEnemysFound();
-            smartTank.targetTankPosition = smartTank.targetTanksFound.FirstOrDefault().Key;
+            smartTank.targetTankPosition = smartTank .targetTanksFound.FirstOrDefault().Key;
             smartTank.stats["inRangeOfEnemy"] = (Vector3.Distance(smartTank.transform.position, smartTank.targetTankPosition.transform.position) < 25f) ? true : false;
-            if (Vector3.Distance(smartTank.transform.position, smartTank.targetTankPosition.transform.position) > 45f)
+            if (!smartTank.stats["inRangeOfEnemy"])
             {
-                smartTank.stats["inRangeOfEnemy"] = false;
-                smartTank.stats["patrolling"] = true;
-            } else
-            {
+                Debug.Log("l");
                 smartTank.FollowTarget(smartTank.targetTankPosition, 1f);
             }
         } else
         {
-            smartTank.stats["inRangeOfEnemy"] = false;
+            Debug.Log("o");
+            //smartTank.stats["inRangeOfEnemy"] = false;
+            smartTank.stats["chasingEnemy"] = false;
             smartTank.stats["patrolling"] = true;
         }
 
         foreach (var item in smartTank.rules.Rules)
         {
+            Debug.Log("billy cool guy");
             if (item.CheckRule(smartTank.stats) != null)
             {
                 return item.CheckRule(smartTank.stats);

@@ -15,6 +15,7 @@ public class ST_RBSFSM_AttackState : BaseState_FSM_TS
 
     public override Type StateEnter()
     {
+        Debug.Log("Attacking enemy Player");
         smartTank.stats["attackingEnemyPlayer"] = true;
         return null;
     }

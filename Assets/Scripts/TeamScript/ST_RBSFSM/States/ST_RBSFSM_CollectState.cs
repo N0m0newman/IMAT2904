@@ -14,6 +14,7 @@ public class ST_RBSFSM_CollectState : BaseState_FSM_TS
 
     public override Type StateEnter()
     {
+        Debug.Log("Collecting");
         smartTank.stats["collectingState"] = true;
         return null;
     }

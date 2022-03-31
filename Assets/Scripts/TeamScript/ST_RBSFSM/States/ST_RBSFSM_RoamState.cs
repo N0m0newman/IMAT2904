@@ -15,6 +15,7 @@ public class ST_RBSFSM_RoamState : BaseState_FSM_TS
 
     public override Type StateEnter()
     {
+        Debug.Log("roaming");
         smartTank.stats["patrolling"] = true;
         smartTank.targetTankPosition = null;
         smartTank.consumablePosition = null;

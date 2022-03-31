@@ -20,6 +20,8 @@ public class ST_SmartTank_RBSFSM : AITank
 
     public override void AITankStart()
     {
+        Application.targetFrameRate = 60;
+
         stats.Add("patroling", true);
         stats.Add("chasingEnemy", false);
         stats.Add("collectingState", false);
@@ -35,6 +37,7 @@ public class ST_SmartTank_RBSFSM : AITank
         stats.Add("attackingEnemyPlayer", false);
         stats.Add("attackingEnemyBase", false);
         stats.Add("inRangeOfEnemy", false);
+        stats.Add("inRangeOfEnemyBase", false);
         stats.Add("tooCloseToEnemy", false);
 
         //flee rules
@@ -43,13 +46,17 @@ public class ST_SmartTank_RBSFSM : AITank
         stats.Add("lowHealth", false);
 
         //Populating Rule Dictionary
-        rules.AddRule(new ST_Rule("patroling", "spottedEnemy", typeof(ChaseState_FSM_ST), ST_Rule.Predicate.AND));
-        rules.AddRule(new ST_Rule("attackingEnemyBase", "spottedEnemy", typeof(ChaseState_FSM_ST), ST_Rule.Predicate.AND));
+        rules.AddRule(new ST_Rule("patroling", "spottedEnemy", typeof(ST_RBSFSM_ChaseState), ST_Rule.Predicate.AND));
+        rules.AddRule(new ST_Rule("attackingEnemyBase", "spottedEnemy", typeof(ST_RBSFSM_ChaseState), ST_Rule.Predicate.AND));
 
-        rules.AddRule(new ST_Rule("attackingEnemyPlayer", "lowAmmo", typeof(ST_RBSFSM_RoamState), ST_Rule.Predicate.AND));
-        rules.AddRule(new ST_Rule("chasingEnemy", "lowFuel", typeof(ST_RBSFSM_RoamState), ST_Rule.Predicate.AND));
-        rules.AddRule(new ST_Rule("lowHealth", "lowAmmo", typeof(ST_RBSFSM_RoamState), ST_Rule.Predicate.OR));
-        rules.AddRule(new ST_Rule("attackingEnemyPlayer", "lowHealth", typeof(ST_RBSFSM_RoamState), ST_Rule.Predicate.AND));
+        rules.AddRule(new ST_Rule("inRangeOfEnemy", "chasingEnemy", typeof(ST_RBSFSM_AttackState), ST_Rule.Predicate.AND));
+        rules.AddRule(new ST_Rule("patroling", "inRangeOfEnemy", typeof(ST_RBSFSM_AttackState), ST_Rule.Predicate.AND));
+        rules.AddRule(new ST_Rule("patroling", "spottedEnemyBase", typeof(ST_RBSFSM_AttackBaseState), ST_Rule.Predicate.AND));
+
+        //rules.AddRule(new ST_Rule("attackingEnemyPlayer", "lowAmmo", typeof(ST_RBSFSM_RoamState), ST_Rule.Predicate.AND));
+        //rules.AddRule(new ST_Rule("chasingEnemy", "lowFuel", typeof(ST_RBSFSM_RoamState), ST_Rule.Predicate.AND));
+        //rules.AddRule(new ST_Rule("lowHealth", "lowAmmo", typeof(ST_RBSFSM_RoamState), ST_Rule.Predicate.OR));
+        //rules.AddRule(new ST_Rule("attackingEnemyPlayer", "lowHealth", typeof(ST_RBSFSM_RoamState), ST_Rule.Predicate.AND));
 
         InitializeStateMachine();
     }
@@ -99,6 +106,11 @@ public class ST_SmartTank_RBSFSM : AITank
             stats["tooCloseToEnemy"] = false;
         }
         
+        if(basePosition != null)
+        {
+            stats["inRangeOfEnemyBase"] = (Vector3.Distance(transform.position, basePosition.transform.position) < 15f) ? true : false;
+        }
+
         //consumable found
         if (GetAllConsumablesFound.Count != 0 && GetAllConsumablesFound.FirstOrDefault().Key != null)
         {//gameobject object, float distance
