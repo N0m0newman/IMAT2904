@@ -23,8 +23,9 @@ public class SmartTank_FSM_ST : AITank
     {
         //This method runs once at the beginning when pressing play in Unity.
         InitializeStateMachine();
-
+        Application.targetFrameRate = 60;
     }
+
     private void InitializeStateMachine()
     {
         Dictionary<Type, BaseState_FSM_TS> states = new Dictionary<Type, BaseState_FSM_TS>();
@@ -40,6 +41,7 @@ public class SmartTank_FSM_ST : AITank
         temp.SetStates(states);
         Debug.Log(states.Values);
     }
+
     /*******************************************************************************************************       
     WARNING, do not include void Update(), use AITankUpdate() instead if you want to use Update method from Monobehaviour.
     *******************************************************************************************************/
@@ -47,6 +49,7 @@ public class SmartTank_FSM_ST : AITank
     {
         //This method runs once per frame.
     }
+
     /*******************************************************************************************************       
     WARNING, do not include void OnCollisionEnter(), use AIOnCollisionEnter() instead if you want to use Update method from Monobehaviour.
     *******************************************************************************************************/
@@ -54,42 +57,51 @@ public class SmartTank_FSM_ST : AITank
     {
         //This method is used for detecting collisions (unlikley you will need this).
     }
+
     public void RandomPath(float normalizedSpeed)
     {
         FollowPathToRandomPoint(normalizedSpeed);
     }
+
     public float FuelCheck()
     {
         float fuel = GetFuelLevel;
         return fuel;
     }
+
     public float HealthCheck()
     {
         float health = GetHealthLevel;
         return health;
     }
+
     public float AmmoCheck()
     {
         float ammo = GetAmmoLevel;
         return ammo;
     }
+
     public void EnemeyTankCheck()
     {
         targetTanksFound = GetAllTargetTanksFound;
     }
+
     public void CollectableCheck()
     {
         consumablesFound = GetAllConsumablesFound;
     }
+
     public void BaseFound()
     {
         basesFound = GetAllBasesFound;
     }
+
     public void MoveTowardsObject(GameObject followThis, float normalizedSpeed)
     {
 
         FollowPathToPoint(followThis, normalizedSpeed);
     }
+
     public void FireTank(GameObject targetTankPosition)
     {
         FireAtPoint(targetTankPosition);

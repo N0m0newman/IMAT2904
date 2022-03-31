@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class ST_RBSFSM_PatrolState : BaseState_FSM_TS
+public class ST_RBSFSM_RoamState : BaseState_FSM_TS
 {
-    private ST_SmartTank_RBSFSM smartTank;
-    public ST_RBSFSM_PatrolState(ST_SmartTank_RBSFSM smartTank)
+
+    ST_SmartTank_RBSFSM smartTank;
+    public ST_RBSFSM_RoamState(ST_SmartTank_RBSFSM smartTank)
     {
         this.smartTank = smartTank;
     }
@@ -14,6 +16,9 @@ public class ST_RBSFSM_PatrolState : BaseState_FSM_TS
     public override Type StateEnter()
     {
         smartTank.stats["patrolling"] = true;
+        smartTank.targetTankPosition = null;
+        smartTank.consumablePosition = null;
+        smartTank.basePosition = null;
         return null;
     }
 
@@ -25,8 +30,26 @@ public class ST_RBSFSM_PatrolState : BaseState_FSM_TS
 
     public override Type StateUpdate()
     {
-        smartTank.GotoRandomLocation(0.5f);
-        foreach(var item in smartTank.rules.Rules)
+        //Update stored data Dicton
+        smartTank.GetEnemysFound();
+        smartTank.GetCollectablesFound();
+        smartTank.GetBasesFound();
+
+        #region Moving
+        if (smartTank.GetFuel() >= 40) //if the fuel is greater then or eqaul to 60 move at 0.5 speed
+        {
+            smartTank.GotoRandomLocation(0.5f);
+            smartTank.stats["lowFuel"] = false;
+        }
+        else
+        {
+            smartTank.GotoRandomLocation(0.25f);
+            smartTank.stats["lowFuel"] = true;
+        }
+        #endregion
+
+        //reevaluate rules
+        foreach (var item in smartTank.rules.Rules)
         {
             if(item.CheckRule(smartTank.stats) != null)
             {
@@ -35,4 +58,5 @@ public class ST_RBSFSM_PatrolState : BaseState_FSM_TS
         }
         return null;
     }
+
 }

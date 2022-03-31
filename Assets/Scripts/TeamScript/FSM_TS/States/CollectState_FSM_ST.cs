@@ -9,23 +9,25 @@ public class CollectState_FSM_ST : BaseState_FSM_TS
 {
 
     private SmartTank_FSM_ST AiTank_FSM;
+
     public CollectState_FSM_ST(SmartTank_FSM_ST AiTank_FSM)
     {
-
         this.AiTank_FSM = AiTank_FSM;
 
     }
+
     public override Type StateEnter()
     {
- 
-        return null;
 
+        return null;
     }
+
     public override Type StateExit()
     {
-        return null;
 
+        return null;
     }
+
     public override Type StateUpdate()
     {
         AiTank_FSM.EnemeyTankCheck();

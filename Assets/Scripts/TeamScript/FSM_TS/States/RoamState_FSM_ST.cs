@@ -16,16 +16,16 @@ public class RoamState_FSM_ST : BaseState_FSM_TS
         this.AiTank_FSM = AiTank_FSM;
 
     }
+
     public override Type StateEnter()
     {
         AiTank_FSM.targetTankPosition = null;
         AiTank_FSM.consumablePosition = null;
         AiTank_FSM.basePosition = null;
         return null;
-
     }
-    public override Type StateExit()
 
+    public override Type StateExit()
     {
 
         return null;
