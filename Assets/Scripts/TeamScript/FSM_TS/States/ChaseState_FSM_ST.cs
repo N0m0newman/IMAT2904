@@ -36,6 +36,7 @@ public class ChaseState_FSM_ST : BaseState_FSM_TS
 
     public override Type StateUpdate()
     {
+        Debug.Log("uwu");
         AiTank_FSM.EnemeyTankCheck();
         AiTank_FSM.HealthCheck();
         AiTank_FSM.AmmoCheck();
@@ -43,7 +44,9 @@ public class ChaseState_FSM_ST : BaseState_FSM_TS
         AiTank_FSM.CollectableCheck();
 
         AiTank_FSM.targetTankPosition = AiTank_FSM.targetTanksFound.FirstOrDefault().Key;
-        AiTank_FSM.MoveTowardsObject(AiTank_FSM.targetTankPosition, 0.25f); // move towards target and fire at the target.
+
+
+         // move towards target and fire at the target.
         if (AiTank_FSM.targetTankPosition != null)
         {
             //get closer to target, and fire
@@ -52,8 +55,9 @@ public class ChaseState_FSM_ST : BaseState_FSM_TS
                 return typeof(AttackState_FSM_ST);
             }
             else if(Vector3.Distance(AiTank_FSM.transform.position, AiTank_FSM.targetTankPosition.transform.position) > 35f)
-                {
-                return typeof(RoamState_FSM_ST);
+            {
+                AiTank_FSM.MoveTowardsObject(AiTank_FSM.targetTankPosition, 0.25f);
+                return null;
             }
         }
 

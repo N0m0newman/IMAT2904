@@ -17,8 +17,8 @@ public class RoamState_FSM_ST : BaseState_FSM_TS
 
     }
     public override Type StateEnter()
-
     {
+        Debug.Log("eh");
         AiTank_FSM.targetTankPosition = null;
         AiTank_FSM.consumablePosition = null;
         AiTank_FSM.basePosition = null;
@@ -42,21 +42,23 @@ public class RoamState_FSM_ST : BaseState_FSM_TS
         AiTank_FSM.CollectableCheck();
         
         
-        AiTank_FSM.RandomPath(0.5f);
+       // AiTank_FSM.RandomPath(0.5f);
 
         if (AiTank_FSM.FuelCheck() < 75) // if the fuel is less then 75 move at half speed.
         {
             AiTank_FSM.RandomPath(0.25f);
             return null;
+        } else
+        {
+            AiTank_FSM.RandomPath(0.5f);
         }
-        else if (AiTank_FSM.HealthCheck() < 50 && AiTank_FSM.consumablesFound.Count !=0) //if you have less and there is collecatbles near by go to it.
+        if (AiTank_FSM.HealthCheck() < 50 && AiTank_FSM.consumablesFound.Count !=0) //if you have less and there is collecatbles near by go to it.
         {
             AiTank_FSM.consumablePosition = AiTank_FSM.consumablesFound.FirstOrDefault().Key;
             return typeof(CollectState_FSM_ST);
         }
-        if (AiTank_FSM.FuelCheck()< 50) // fuel less then 50 find fuel.
-        {
-           
+        if (AiTank_FSM.FuelCheck() < 50) // fuel less then 50 find fuel.
+        { 
             return typeof(CollectState_FSM_ST);
         }
         if (AiTank_FSM.AmmoCheck() < 4)
@@ -64,7 +66,7 @@ public class RoamState_FSM_ST : BaseState_FSM_TS
             AiTank_FSM.consumablePosition = AiTank_FSM.consumablesFound.FirstOrDefault().Key;
             return typeof(CollectState_FSM_ST);
         }
-        if (AiTank_FSM.targetTanksFound.Count > 0 && AiTank_FSM.targetTanksFound.FirstOrDefault().Key != null && AiTank_FSM.HealthCheck()>50 && AiTank_FSM.AmmoCheck()>0) //If the enemy is in range and the health if above 50 and the ammount isnt 0 purse enemy/ enter chase.
+        if (AiTank_FSM.targetTanksFound.Count > 0 && AiTank_FSM.targetTanksFound.FirstOrDefault().Key != null /*&& AiTank_FSM.HealthCheck()>50 && AiTank_FSM.AmmoCheck()>0*/) //If the enemy is in range and the health if above 50 and the ammount isnt 0 purse enemy/ enter chase.
         {
                AiTank_FSM.targetTankPosition = AiTank_FSM.targetTanksFound.FirstOrDefault().Key;
             return typeof(ChaseState_FSM_ST);

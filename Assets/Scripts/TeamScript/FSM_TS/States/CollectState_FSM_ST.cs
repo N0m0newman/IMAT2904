@@ -20,7 +20,7 @@ public class CollectState_FSM_ST : BaseState_FSM_TS
 
     {
         Debug.Log("collect" + AiTank_FSM.HealthCheck());
-  
+ 
         return null;
 
     }
@@ -32,7 +32,6 @@ public class CollectState_FSM_ST : BaseState_FSM_TS
     }
 
     public override Type StateUpdate()
-
     {
         AiTank_FSM.EnemeyTankCheck();
         AiTank_FSM.HealthCheck();

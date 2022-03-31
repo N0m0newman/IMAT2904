@@ -24,7 +24,6 @@ public class AttackState_FSM_ST : BaseState_FSM_TS
 
     }
     public override Type StateExit()
-
     {
         AiTank_FSM.targetTankPosition = null;
         AiTank_FSM.consumablePosition = null;

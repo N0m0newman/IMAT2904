@@ -14,6 +14,8 @@ public class SmartTank_FSM_ST : AITank
     public GameObject consumablePosition;
     public GameObject basePosition;
 
+    
+
     /*******************************************************************************************************      
     WARNING, do not include void Start(), use AITankStart() instead if you want to use Start method from Monobehaviour.
     *******************************************************************************************************/
@@ -21,6 +23,7 @@ public class SmartTank_FSM_ST : AITank
     {
         //This method runs once at the beginning when pressing play in Unity.
         InitializeStateMachine();
+
     }
     private void InitializeStateMachine()
     {
@@ -29,8 +32,8 @@ public class SmartTank_FSM_ST : AITank
         states.Add(typeof(ChaseState_FSM_ST), new ChaseState_FSM_ST(this));
         states.Add(typeof(AttackState_FSM_ST), new AttackState_FSM_ST(this));
         states.Add(typeof(CollectState_FSM_ST), new CollectState_FSM_ST(this));
-        GetComponent<StateMachine_FSM_ST>().SetStates(states);
-
+        StateMachine_FSM_ST temp = GetComponent<StateMachine_FSM_ST>();
+        temp.SetStates(states);
     }
     /*******************************************************************************************************       
     WARNING, do not include void Update(), use AITankUpdate() instead if you want to use Update method from Monobehaviour.
@@ -48,6 +51,7 @@ public class SmartTank_FSM_ST : AITank
     }
     public void RandomPath(float normalizedSpeed)
     {
+        Debug.Log(normalizedSpeed);
         FollowPathToRandomPoint(normalizedSpeed);
     }
     public float FuelCheck()

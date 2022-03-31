@@ -1,5 +1,6 @@
 using System;
 
+[System.Serializable]
 public abstract class BaseState_FSM_TS
 
 {

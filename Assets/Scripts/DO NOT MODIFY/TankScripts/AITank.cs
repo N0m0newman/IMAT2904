@@ -5,6 +5,7 @@ using UnityEngine;
 
 public abstract class AITank : MonoBehaviour
 {
+    [SerializeField]
     private float fuel = 100f;
     private float fuelMax = 125f;
     private int ammo;

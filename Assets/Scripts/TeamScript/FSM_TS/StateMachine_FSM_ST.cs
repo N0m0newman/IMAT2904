@@ -7,6 +7,7 @@ public class StateMachine_FSM_ST : MonoBehaviour
 {
     private Dictionary<Type, BaseState_FSM_TS> states;
 
+    [SerializeField]
     public BaseState_FSM_TS currentState;
 
     public BaseState_FSM_TS CurrentState
@@ -42,7 +43,7 @@ public class StateMachine_FSM_ST : MonoBehaviour
             }
         }
     }
-    void SwitchToState(Type nextState)
+    public void SwitchToState(Type nextState)
     {
         CurrentState.StateExit();
 
