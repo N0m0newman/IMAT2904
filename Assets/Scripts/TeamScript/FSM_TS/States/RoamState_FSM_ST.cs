@@ -18,7 +18,6 @@ public class RoamState_FSM_ST : BaseState_FSM_TS
     }
     public override Type StateEnter()
     {
-        Debug.Log("eh");
         AiTank_FSM.targetTankPosition = null;
         AiTank_FSM.consumablePosition = null;
         AiTank_FSM.basePosition = null;
@@ -41,60 +40,29 @@ public class RoamState_FSM_ST : BaseState_FSM_TS
         AiTank_FSM.FuelCheck();
         AiTank_FSM.CollectableCheck();
         AiTank_FSM.BaseFound();
-        
-       // AiTank_FSM.RandomPath(0.5f);
 
-        /*if (AiTank_FSM.FuelCheck() < 75) // if the fuel is less then 75 move at half speed.
+        if(AiTank_FSM.FuelCheck()>=60) //if the fuel is greater then or eqaul to 60 move at 0.5 speed
+        {
+            AiTank_FSM.RandomPath(0.5f);
+        }
+        if (AiTank_FSM.FuelCheck() < 60) //if the fuel is less then 60 move at 0.25 speed.
         {
             AiTank_FSM.RandomPath(0.25f);
-            return null;
-        } else
-        {
-            AiTank_FSM.RandomPath(0.5f);
         }
-        if (AiTank_FSM.HealthCheck() < 50 && AiTank_FSM.consumablesFound.Count !=0) //if you have less and there is collecatbles near by go to it.
-        {
-            AiTank_FSM.consumablePosition = AiTank_FSM.consumablesFound.FirstOrDefault().Key;
-            return typeof(CollectState_FSM_ST);
-        }
-        if (AiTank_FSM.FuelCheck() < 50 && AiTank_FSM.consumablesFound.Count != 0) // fuel less then 50 find fuel.
-        {
-            AiTank_FSM.consumablePosition = AiTank_FSM.consumablesFound.FirstOrDefault().Key;
-            return typeof(CollectState_FSM_ST);
-        }
-        if (AiTank_FSM.AmmoCheck() < 4 && AiTank_FSM.consumablesFound.Count != 0)
-        {
-            AiTank_FSM.consumablePosition = AiTank_FSM.consumablesFound.FirstOrDefault().Key;
-            return typeof(CollectState_FSM_ST);
-        }
-        if (AiTank_FSM.targetTanksFound.Count > 0 && AiTank_FSM.targetTanksFound.FirstOrDefault().Key != null && AiTank_FSM.HealthCheck()>50 && AiTank_FSM.AmmoCheck()>0) //If the enemy is in range and the health if above 50 and the ammount isnt 0 purse enemy/ enter chase.
-        {
-            AiTank_FSM.targetTankPosition = AiTank_FSM.targetTanksFound.FirstOrDefault().Key;
-            return typeof(ChaseState_FSM_ST);
-        }
-        if(AiTank_FSM.basesFound.Count >0 && AiTank_FSM.basesFound.FirstOrDefault().Key != null)
-        {
-            AiTank_FSM.basePosition = AiTank_FSM.basesFound.FirstOrDefault().Key;
-            return typeof(AttackState_FSM_ST);
-        }
-        else //when no other conditons are met move at a 0.5 speed.
-        {
-            return null;
-        }*/
-
-        if(AiTank_FSM.FuelCheck()> 75)
-        {
-            AiTank_FSM.RandomPath(0.5f);
-        }
-        if(AiTank_FSM.targetTanksFound.Count!=0 && AiTank_FSM.targetTanksFound.FirstOrDefault().Key != null)
+        if(AiTank_FSM.targetTanksFound.Count!=0 && AiTank_FSM.targetTanksFound.FirstOrDefault().Key != null) //If there is a target tank in range enter the chase.
         {
             Debug.Log("A");
             return typeof(ChaseState_FSM_ST);
         }
-        if(AiTank_FSM.consumablesFound.Count!=0 && AiTank_FSM.consumablesFound.FirstOrDefault().Key != null)
+        if(AiTank_FSM.consumablesFound.Count!=0 && AiTank_FSM.consumablesFound.FirstOrDefault().Key != null) //if there is consumables in range enter the collecatble.
         {
             Debug.Log("B");
             return typeof(CollectState_FSM_ST);
+        }
+        if (AiTank_FSM.basesFound.Count != 0 && AiTank_FSM.consumablesFound.FirstOrDefault().Key != null) // if there is a enemy base fire at it.
+        {
+            Debug.Log("C");
+            AiTank_FSM.FireTank(AiTank_FSM.basePosition);
         }
         return null;
 

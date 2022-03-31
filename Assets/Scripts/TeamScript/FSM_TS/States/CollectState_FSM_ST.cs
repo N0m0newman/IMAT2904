@@ -10,27 +10,22 @@ public class CollectState_FSM_ST : BaseState_FSM_TS
 
     private SmartTank_FSM_ST AiTank_FSM;
     public CollectState_FSM_ST(SmartTank_FSM_ST AiTank_FSM)
-
     {
 
         this.AiTank_FSM = AiTank_FSM;
 
     }
     public override Type StateEnter()
-
     {
-        Debug.Log("collect" + AiTank_FSM.HealthCheck());
  
         return null;
 
     }
     public override Type StateExit()
-
     {
         return null;
 
     }
-
     public override Type StateUpdate()
     {
         AiTank_FSM.EnemeyTankCheck();
@@ -39,25 +34,26 @@ public class CollectState_FSM_ST : BaseState_FSM_TS
         AiTank_FSM.FuelCheck();
         AiTank_FSM.CollectableCheck();
 
-        AiTank_FSM.consumablePosition = AiTank_FSM.consumablesFound.FirstOrDefault().Key;
+        AiTank_FSM.consumablePosition = AiTank_FSM.consumablesFound.FirstOrDefault().Key; //Set Consume Position
 
-        if (AiTank_FSM.consumablesFound.Count > 0)
+        AiTank_FSM.targetTankPosition = AiTank_FSM.targetTanksFound.FirstOrDefault().Key;
+
+        if (AiTank_FSM.consumablesFound.Count > 0) //if there are consumeables move towards them.
         {
             AiTank_FSM.MoveTowardsObject(AiTank_FSM.consumablePosition, 0.5f);
-            if (AiTank_FSM.HealthCheck() > 50)
-            {
-                return null;
-            }
-            if(AiTank_FSM.AmmoCheck() == 0)
-            {
-                return null;
-            }
-            /*if (AiTank_FSM.FuelCheck() < 50)
-            {
-                return typeof (RoamState_FSM_ST);
-            }*/
 
         }
+
+        if (AiTank_FSM.consumablesFound.Count == 0) // if there is no other consumables enter roam.
+        {
+                return typeof(RoamState_FSM_ST);
+        }
+
+        if (AiTank_FSM.targetTanksFound != null) //if a tank comes into range chase.
+        {
+            return typeof(ChaseState_FSM_ST);
+        }
+
         else
         {
             AiTank_FSM.targetTankPosition = null;
@@ -65,7 +61,6 @@ public class CollectState_FSM_ST : BaseState_FSM_TS
             AiTank_FSM.basePosition = null;
             return typeof(RoamState_FSM_ST);
         }
-        return null;
     }
 
 }

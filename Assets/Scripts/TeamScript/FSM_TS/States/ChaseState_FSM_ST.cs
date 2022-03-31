@@ -38,17 +38,27 @@ public class ChaseState_FSM_ST : BaseState_FSM_TS
         AiTank_FSM.CollectableCheck();
 
         AiTank_FSM.targetTankPosition = AiTank_FSM.targetTanksFound.FirstOrDefault().Key;
-        if ( AiTank_FSM.targetTankPosition != null)
+        if ( AiTank_FSM.targetTanksFound.FirstOrDefault().Key != null) //as long as target tank doesnt equal NULL chase
         {
+            AiTank_FSM.EnemeyTankCheck(); //check and set the vlaues again
+            AiTank_FSM.targetTankPosition = AiTank_FSM.targetTanksFound.FirstOrDefault().Key;
             //get closer to target, and fire
-            if (Vector3.Distance(AiTank_FSM.transform.position, AiTank_FSM.targetTankPosition.transform.position) < 25f)
+            if (Vector3.Distance(AiTank_FSM.transform.position, AiTank_FSM.targetTankPosition.transform.position) < 25f)//if its in a range of 25 or less fire
             {
                 return typeof(AttackState_FSM_ST);
             }
-            else
+            if(Vector3.Distance(AiTank_FSM.transform.position, AiTank_FSM.targetTankPosition.transform.position) < 45f)//if the range is greater then 45 roam.
+            {
+                return typeof(RoamState_FSM_ST);
+            }
+            else //Move towards the target.
             {
                 AiTank_FSM.MoveTowardsObject(AiTank_FSM.targetTankPosition, 1f);
             }
+        }
+        else // if the list becomes NULL roam
+        {
+            return typeof(RoamState_FSM_ST);
         }
 
         return null;
