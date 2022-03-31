@@ -77217,6 +77217,7 @@ GameObject:
   - component: {fileID: 1800502786}
   - component: {fileID: 1800502790}
   - component: {fileID: 1800502785}
+  - component: {fileID: 1800502791}
   m_Layer: 13
   m_Name: Tank
   m_TagString: Tank
@@ -77233,9 +77234,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1800502784}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e593e043a94813f4ba61a627a04e8571, type: 3}
+  m_Script: {fileID: 11500000, guid: b75da4861794a7946b41285e482ed74a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetTankPosition: {fileID: 0}
+  consumablePosition: {fileID: 0}
+  basePosition: {fileID: 0}
 --- !u!65 &1800502786
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -77391,6 +77395,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1800502791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1800502784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c5a320f25f43dc49b5a74140fa4d4a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1813624867
 GameObject:
   m_ObjectHideFlags: 0
