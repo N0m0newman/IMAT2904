@@ -52,19 +52,19 @@ public class CollectState_FSM_ST : BaseState_FSM_TS
             {
                 return null;
             }
-            if (AiTank_FSM.FuelCheck() < 50)
+            /*if (AiTank_FSM.FuelCheck() < 50)
             {
                 return typeof (RoamState_FSM_ST);
-            }
-            else
-            {
-                AiTank_FSM.targetTankPosition = null;
-                AiTank_FSM.consumablePosition = null;
-                AiTank_FSM.basePosition = null;
-                return typeof(RoamState_FSM_ST);
-            }
+            }*/
+
         }
-        
+        else
+        {
+            AiTank_FSM.targetTankPosition = null;
+            AiTank_FSM.consumablePosition = null;
+            AiTank_FSM.basePosition = null;
+            return typeof(RoamState_FSM_ST);
+        }
         return null;
     }
 

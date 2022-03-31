@@ -28,12 +28,17 @@ public class SmartTank_FSM_ST : AITank
     private void InitializeStateMachine()
     {
         Dictionary<Type, BaseState_FSM_TS> states = new Dictionary<Type, BaseState_FSM_TS>();
+
         states.Add(typeof(RoamState_FSM_ST), new RoamState_FSM_ST(this));
         states.Add(typeof(ChaseState_FSM_ST), new ChaseState_FSM_ST(this));
         states.Add(typeof(AttackState_FSM_ST), new AttackState_FSM_ST(this));
         states.Add(typeof(CollectState_FSM_ST), new CollectState_FSM_ST(this));
+
+        GetComponent<StateMachine_FSM_ST>().SetStates(states);
+
         StateMachine_FSM_ST temp = GetComponent<StateMachine_FSM_ST>();
         temp.SetStates(states);
+        Debug.Log(states.Values);
     }
     /*******************************************************************************************************       
     WARNING, do not include void Update(), use AITankUpdate() instead if you want to use Update method from Monobehaviour.
@@ -51,7 +56,6 @@ public class SmartTank_FSM_ST : AITank
     }
     public void RandomPath(float normalizedSpeed)
     {
-        Debug.Log(normalizedSpeed);
         FollowPathToRandomPoint(normalizedSpeed);
     }
     public float FuelCheck()
