@@ -16,7 +16,7 @@ public class ST_RBSFSM_RoamState : BaseState_FSM_TS
     public override Type StateEnter()
     {
         Debug.Log("roaming");
-        smartTank.stats["patrolling"] = true;
+        smartTank.stats["patroling"] = true;
         smartTank.targetTankPosition = null;
         smartTank.consumablePosition = null;
         smartTank.basePosition = null;
@@ -25,12 +25,19 @@ public class ST_RBSFSM_RoamState : BaseState_FSM_TS
 
     public override Type StateExit()
     {
-        smartTank.stats["patrolling"] = false;
+        Debug.Log("oawurioahrtf");
+        smartTank.stats["patroling"] = false;
         return null;
     }
+    bool t = false;
 
     public override Type StateUpdate()
     {
+        if(t == false)
+        {
+            Debug.Log("racist words");
+            t = true;
+        }
         //Update stored data Dicton
         smartTank.GetEnemysFound();
         smartTank.GetCollectablesFound();

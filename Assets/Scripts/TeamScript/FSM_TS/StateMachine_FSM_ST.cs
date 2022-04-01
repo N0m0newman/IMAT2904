@@ -46,7 +46,6 @@ public class StateMachine_FSM_ST : MonoBehaviour
     public void SwitchToState(Type nextState)
     {
         CurrentState.StateExit();
-
         CurrentState = states[nextState];
 
         CurrentState.StateEnter();

@@ -23,7 +23,10 @@ public class ST_SmartTank_RBSFSM : AITank
     {
         Application.targetFrameRate = 60;
 
-        stats.Add("patroling", true);
+        InitializeStateMachine();
+
+
+        stats.Add("patroling", false);
         stats.Add("chasingEnemy", false);
         stats.Add("collectingState", false);
 
@@ -47,11 +50,11 @@ public class ST_SmartTank_RBSFSM : AITank
         stats.Add("lowHealth", false);
 
         //Populating Rule Dictionary
+        rules.AddRule(new ST_Rule("attackingEnemyPlayer", "lowHealth", typeof(ST_RBSFSM_RoamState), ST_Rule.Predicate.AND));
+        rules.AddRule(new ST_Rule("chasingEnemy", "lowHealth", typeof(ST_RBSFSM_RoamState), ST_Rule.Predicate.AND));
+        rules.AddRule(new ST_Rule("patroling", "spottedEnemy", typeof(ST_RBSFSM_RoamState), ST_Rule.Predicate.NAND));
         rules.AddRule(new ST_Rule("patroling", "spottedEnemy", typeof(ST_RBSFSM_ChaseState), ST_Rule.Predicate.AND));
         rules.AddRule(new ST_Rule("chasingEnemy", "inRangeOfEnemy", typeof(ST_RBSFSM_AttackState), ST_Rule.Predicate.AND));
-
-
-        InitializeStateMachine();
     }
 
     private void InitializeStateMachine()
@@ -129,9 +132,10 @@ public class ST_SmartTank_RBSFSM : AITank
             }
         }
 
-        Debug.Log("is Close: " + stats["inRangeOfEnemy"]);
-        Debug.Log("is Chasing: " + stats["chasingEnemy"]);
-
+        foreach(KeyValuePair<String, bool> keyValuePair in stats)
+        {
+            Debug.Log(keyValuePair.Key + " : " + keyValuePair.Value);
+        }
     }
 
     public override void AIOnCollisionEnter(Collision collision)
