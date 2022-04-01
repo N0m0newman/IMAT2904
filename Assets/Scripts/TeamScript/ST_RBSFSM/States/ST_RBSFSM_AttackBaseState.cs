@@ -31,48 +31,8 @@ public class ST_RBSFSM_AttackBaseState : BaseState_FSM_TS
         smartTank.GetBasesFound();
         smartTank.GetCollectablesFound();
 
-        smartTank.basePosition = smartTank.basesFound.FirstOrDefault().Key;
-        if (smartTank.basesFound.Count != 0)
-        {
-            if (smartTank.stats["lowAmmo"] != true)
-            {
-                if(smartTank.stats["inRangeOfEnemyBase"])
-                {
-                    smartTank.FireTank(smartTank.basePosition);
-                    smartTank.stats["inRangeOfEnemyBase"] = false;
-                } else
-                {
-                    smartTank.FollowTarget(smartTank.basePosition.gameObject, 1f);
-                }
-            }
-            else
-            {
-                smartTank.stats["attackingEnemyBase"] = false;
-                smartTank.stats["patrolling"] = true;
-                foreach (var item in smartTank.rules.Rules)
-                {
-                    if (item.CheckRule(smartTank.stats) != null)
-                    {
-                        return item.CheckRule(smartTank.stats);
-                    }
-                }
-                return null;
-            }
-        }
-        else
-        {
-            smartTank.stats["attackingEnemyBase"] = false;
+        smartTank.AttackBase();
 
-            smartTank.stats["patroling"] = true;
-            foreach (var item in smartTank.rules.Rules)
-            {
-                if (item.CheckRule(smartTank.stats) != null)
-                {
-                    return item.CheckRule(smartTank.stats);
-                }
-            }
-            return null;
-        }
         foreach (var item in smartTank.rules.Rules)
         {
             if (item.CheckRule(smartTank.stats) != null)

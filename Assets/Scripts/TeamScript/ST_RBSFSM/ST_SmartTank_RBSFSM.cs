@@ -7,6 +7,7 @@ using UnityEngine;
 public class ST_SmartTank_RBSFSM : AITank
 {
     public ST_Rules rules = new ST_Rules();
+    [SerializeField]
     public Dictionary<string, bool> stats = new Dictionary<string, bool>();
 
 
@@ -47,16 +48,8 @@ public class ST_SmartTank_RBSFSM : AITank
 
         //Populating Rule Dictionary
         rules.AddRule(new ST_Rule("patroling", "spottedEnemy", typeof(ST_RBSFSM_ChaseState), ST_Rule.Predicate.AND));
-        rules.AddRule(new ST_Rule("attackingEnemyBase", "spottedEnemy", typeof(ST_RBSFSM_ChaseState), ST_Rule.Predicate.AND));
+        rules.AddRule(new ST_Rule("chasingEnemy", "inRangeOfEnemy", typeof(ST_RBSFSM_AttackState), ST_Rule.Predicate.AND));
 
-        rules.AddRule(new ST_Rule("inRangeOfEnemy", "chasingEnemy", typeof(ST_RBSFSM_AttackState), ST_Rule.Predicate.AND));
-        rules.AddRule(new ST_Rule("patroling", "inRangeOfEnemy", typeof(ST_RBSFSM_AttackState), ST_Rule.Predicate.AND));
-        rules.AddRule(new ST_Rule("patroling", "spottedEnemyBase", typeof(ST_RBSFSM_AttackBaseState), ST_Rule.Predicate.AND));
-
-        //rules.AddRule(new ST_Rule("attackingEnemyPlayer", "lowAmmo", typeof(ST_RBSFSM_RoamState), ST_Rule.Predicate.AND));
-        //rules.AddRule(new ST_Rule("chasingEnemy", "lowFuel", typeof(ST_RBSFSM_RoamState), ST_Rule.Predicate.AND));
-        //rules.AddRule(new ST_Rule("lowHealth", "lowAmmo", typeof(ST_RBSFSM_RoamState), ST_Rule.Predicate.OR));
-        //rules.AddRule(new ST_Rule("attackingEnemyPlayer", "lowHealth", typeof(ST_RBSFSM_RoamState), ST_Rule.Predicate.AND));
 
         InitializeStateMachine();
     }
@@ -81,6 +74,11 @@ public class ST_SmartTank_RBSFSM : AITank
 
     public override void AITankUpdate()
     {
+        GetBasesFound();
+        GetCollectablesFound();
+        GetEnemysFound();
+
+
         //reset all the collectables
         stats["spottedFuel"] = false;
         stats["spottedAmmo"] = false;
@@ -98,8 +96,8 @@ public class ST_SmartTank_RBSFSM : AITank
         stats["lowHealth"] = (GetHealthLevel < 40) ? true : false;
         if(targetTankPosition != null)
         {
-            stats["inRangeOfEnemy"] = (Vector3.Distance(transform.position, targetTankPosition.transform.position) < 25f) ? true : false;
-            stats["tooCloseToEnemy"] = (Vector3.Distance(transform.position, targetTankPosition.transform.position) < 5f) ? true : false;
+            stats["inRangeOfEnemy"] = (Vector3.Distance(transform.position, targetTankPosition.transform.position) < 30f) ? true : false;
+            stats["tooCloseToEnemy"] = (Vector3.Distance(transform.position, targetTankPosition.transform.position) < 25f) ? true : false;
         } else
         {
             stats["inRangeOfEnemy"] = false;
@@ -108,7 +106,7 @@ public class ST_SmartTank_RBSFSM : AITank
         
         if(basePosition != null)
         {
-            stats["inRangeOfEnemyBase"] = (Vector3.Distance(transform.position, basePosition.transform.position) < 15f) ? true : false;
+            stats["inRangeOfEnemyBase"] = (Vector3.Distance(transform.position, basePosition.transform.position) < 20f) ? true : false;
         }
 
         //consumable found
@@ -130,6 +128,10 @@ public class ST_SmartTank_RBSFSM : AITank
                 }
             }
         }
+
+        Debug.Log("is Close: " + stats["inRangeOfEnemy"]);
+        Debug.Log("is Chasing: " + stats["chasingEnemy"]);
+
     }
 
     public override void AIOnCollisionEnter(Collision collision)
@@ -181,6 +183,72 @@ public class ST_SmartTank_RBSFSM : AITank
     public void GetBasesFound()
     {
         basesFound = GetAllBasesFound;
+    }
+
+    public void AttackPlayer()
+    {
+        targetTankPosition = targetTanksFound.FirstOrDefault().Key;
+        if (targetTanksFound.Count != 0)
+        {
+            if (stats["inRangeOfEnemy"] == true && stats["lowAmmo"] != true)
+            {
+                FireTank(targetTankPosition);
+            }
+        }
+    }
+
+    public void ChasePlayer()
+    { 
+        targetTankPosition = targetTanksFound.FirstOrDefault().Key;
+        if (targetTanksFound.FirstOrDefault().Key != null)
+        {
+            if (stats["inRangeOfEnemy"] == false)
+            {
+                Debug.Log("l");
+                FollowTarget(targetTankPosition, 1f);
+                stats["inRangeOfEnemy"] = (Vector3.Distance(transform.position, targetTankPosition.transform.position) < 30f) ? true : false;
+                Debug.Log(stats["inRangeOfEnemy"]);
+            }
+            else
+            {
+                //AttackPlayer();
+            }
+        }
+        else
+        {
+            Debug.Log("o");
+            stats["chasingEnemy"] = false;
+            stats["patrolling"] = true;
+        }
+    }
+
+    public void AttackBase()
+    {
+        basePosition = basesFound.FirstOrDefault().Key;
+        if (basesFound.Count != 0)
+        {
+            if (stats["lowAmmo"] != true)
+            {
+                if (stats["inRangeOfEnemyBase"])
+                {
+                    FireTank(basePosition);
+                }
+                else
+                {
+                    FollowTarget(basePosition.gameObject, 1f);
+                }
+            }
+            else
+            {
+                stats["attackingEnemyBase"] = false;
+                stats["patrolling"] = true;
+            }
+        }
+        else
+        {
+            stats["patrolling"] = true;
+            stats["attackingEnemyBase"] = false;
+        }
     }
 
     public void GetCollectablesFound()

@@ -31,32 +31,11 @@ public class ST_RBSFSM_ChaseState : BaseState_FSM_TS
 
     public override Type StateUpdate()
     {
-        smartTank.GetEnemysFound();
-        smartTank.GetCollectablesFound();
-        smartTank.GetEnemysFound();
 
-        smartTank.targetTankPosition = smartTank.targetTanksFound.FirstOrDefault().Key;
-        if (smartTank.targetTanksFound.FirstOrDefault().Key != null)
-        {
-            smartTank.GetEnemysFound();
-            smartTank.targetTankPosition = smartTank .targetTanksFound.FirstOrDefault().Key;
-            smartTank.stats["inRangeOfEnemy"] = (Vector3.Distance(smartTank.transform.position, smartTank.targetTankPosition.transform.position) < 25f) ? true : false;
-            if (!smartTank.stats["inRangeOfEnemy"])
-            {
-                Debug.Log("l");
-                smartTank.FollowTarget(smartTank.targetTankPosition, 1f);
-            }
-        } else
-        {
-            Debug.Log("o");
-            //smartTank.stats["inRangeOfEnemy"] = false;
-            smartTank.stats["chasingEnemy"] = false;
-            smartTank.stats["patrolling"] = true;
-        }
+        smartTank.ChasePlayer();
 
         foreach (var item in smartTank.rules.Rules)
         {
-            Debug.Log("billy cool guy");
             if (item.CheckRule(smartTank.stats) != null)
             {
                 return item.CheckRule(smartTank.stats);

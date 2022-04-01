@@ -25,50 +25,15 @@ public class ST_RBSFSM_AttackState : BaseState_FSM_TS
         smartTank.stats["attackingEnemyPlayer"] = false;
         return null;
     }
-
+    float time;
     public override Type StateUpdate()
     {
-        smartTank.GetEnemysFound();
-        smartTank.GetCollectablesFound();
-        smartTank.GetEnemysFound();
 
-        smartTank.targetTankPosition = smartTank.targetTanksFound.FirstOrDefault().Key;
-        if(smartTank.targetTanksFound.Count != 0)
+        smartTank.AttackPlayer();
+
+        time += Time.deltaTime;
+        if(time > 1f)
         {
-            smartTank.GetEnemysFound();
-            if(smartTank.stats["inRangeOfEnemy"] == true && smartTank.stats["lowAmmo"] != true)
-            {
-                smartTank.FireTank(smartTank.targetTankPosition);
-                smartTank.GetEnemysFound();
-                if(Vector3.Distance(smartTank.transform.position, smartTank.targetTankPosition.transform.position) > 50f) {
-                    smartTank.stats["inRangeOfEnemy"] = false;
-                    smartTank.stats["patroling"] = true;
-                    foreach (var item in smartTank.rules.Rules)
-                    {
-                        if (item.CheckRule(smartTank.stats) != null)
-                        {
-                            return item.CheckRule(smartTank.stats);
-                        }
-                    }
-                    return null;
-                }
-            } else
-            {
-                smartTank.stats["inRangeOfEnemy"] = false;
-                smartTank.stats["chasingEnemy"] = true;
-                foreach (var item in smartTank.rules.Rules)
-                {
-                    if (item.CheckRule(smartTank.stats) != null)
-                    {
-                        return item.CheckRule(smartTank.stats);
-                    }
-                }
-                return null;
-            }
-        } else
-        {
-            smartTank.stats["inRangeOfEnemy"] = false;
-            smartTank.stats["patroling"] = true;
             foreach (var item in smartTank.rules.Rules)
             {
                 if (item.CheckRule(smartTank.stats) != null)
@@ -77,13 +42,6 @@ public class ST_RBSFSM_AttackState : BaseState_FSM_TS
                 }
             }
             return null;
-        }
-        foreach (var item in smartTank.rules.Rules)
-        {
-            if (item.CheckRule(smartTank.stats) != null)
-            {
-                return item.CheckRule(smartTank.stats);
-            }
         }
         return null;
     }
