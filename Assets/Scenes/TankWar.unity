@@ -61721,6 +61721,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58948fffe4733604497fe40f012a122f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fuel: 100
   targetTankPosition: {fileID: 0}
   consumablePosition: {fileID: 0}
   basePosition: {fileID: 0}
@@ -77218,6 +77219,7 @@ GameObject:
   - component: {fileID: 1800502790}
   - component: {fileID: 1800502785}
   - component: {fileID: 1800502791}
+  - component: {fileID: 1800502792}
   m_Layer: 13
   m_Name: Tank
   m_TagString: Tank
@@ -77232,11 +77234,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1800502784}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b75da4861794a7946b41285e482ed74a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fuel: 100
   targetTankPosition: {fileID: 0}
   consumablePosition: {fileID: 0}
   basePosition: {fileID: 0}
@@ -77407,6 +77410,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c5a320f25f43dc49b5a74140fa4d4a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1800502792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1800502784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0d0ae14d89d87a4da58db6326fd94c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fuel: 100
+  targetTankPosition: {fileID: 0}
+  consumablePosition: {fileID: 0}
+  basePosition: {fileID: 0}
 --- !u!1 &1813624867
 GameObject:
   m_ObjectHideFlags: 0

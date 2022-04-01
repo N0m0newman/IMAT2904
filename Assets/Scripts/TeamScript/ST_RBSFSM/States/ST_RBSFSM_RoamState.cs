@@ -29,20 +29,9 @@ public class ST_RBSFSM_RoamState : BaseState_FSM_TS
         smartTank.stats["patroling"] = false;
         return null;
     }
-    bool t = false;
 
     public override Type StateUpdate()
     {
-        if(t == false)
-        {
-            Debug.Log("racist words");
-            t = true;
-        }
-        //Update stored data Dicton
-        smartTank.GetEnemysFound();
-        smartTank.GetCollectablesFound();
-        smartTank.GetBasesFound();
-
         #region Moving
         if (smartTank.GetFuel() >= 40) //if the fuel is greater then or eqaul to 60 move at 0.5 speed
         {

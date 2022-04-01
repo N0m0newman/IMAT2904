@@ -23,10 +23,7 @@ public class ST_SmartTank_RBSFSM : AITank
     {
         Application.targetFrameRate = 60;
 
-        InitializeStateMachine();
-
-
-        stats.Add("patroling", false);
+        stats.Add("patroling", true);
         stats.Add("chasingEnemy", false);
         stats.Add("collectingState", false);
 
@@ -55,6 +52,16 @@ public class ST_SmartTank_RBSFSM : AITank
         rules.AddRule(new ST_Rule("patroling", "spottedEnemy", typeof(ST_RBSFSM_RoamState), ST_Rule.Predicate.NAND));
         rules.AddRule(new ST_Rule("patroling", "spottedEnemy", typeof(ST_RBSFSM_ChaseState), ST_Rule.Predicate.AND));
         rules.AddRule(new ST_Rule("chasingEnemy", "inRangeOfEnemy", typeof(ST_RBSFSM_AttackState), ST_Rule.Predicate.AND));
+
+        rules.AddRule(new ST_Rule("lowAmmo", "spottedAmmo", typeof(ST_RBSFSM_RoamState), ST_Rule.Predicate.OR));
+        rules.AddRule(new ST_Rule("lowFuel", "spottedFuel", typeof(ST_RBSFSM_RoamState), ST_Rule.Predicate.OR));
+        rules.AddRule(new ST_Rule("lowHealth", "spottedHealth", typeof(ST_RBSFSM_RoamState), ST_Rule.Predicate.OR));
+
+        rules.AddRule(new ST_Rule("spottedEnemyBase", "patroling", typeof(ST_RBSFSM_AttackBaseState), ST_Rule.Predicate.AND));
+        rules.AddRule(new ST_Rule("attackingEnemyBase", "lowAmmo", typeof(ST_RBSFSM_CollectState), ST_Rule.Predicate.AND));
+
+
+        InitializeStateMachine();
     }
 
     private void InitializeStateMachine()
