@@ -59,7 +59,7 @@ public class RoamState_FSM_ST : BaseState_FSM_TS
             Debug.Log("B");
             return typeof(CollectState_FSM_ST);
         }
-        if (AiTank_FSM.basesFound.Count != 0 && AiTank_FSM.consumablesFound.FirstOrDefault().Key != null) // if there is a enemy base fire at it.
+        if (AiTank_FSM.basesFound.Count != 0 && AiTank_FSM.basesFound.FirstOrDefault().Key != null) // if there is a enemy base fire at it.
         {
             Debug.Log("C");
             AiTank_FSM.FireTank(AiTank_FSM.basePosition);

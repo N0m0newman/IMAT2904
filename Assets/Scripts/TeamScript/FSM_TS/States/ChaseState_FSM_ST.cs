@@ -47,7 +47,7 @@ public class ChaseState_FSM_ST : BaseState_FSM_TS
             {
                 return typeof(AttackState_FSM_ST);
             }
-            if(Vector3.Distance(AiTank_FSM.transform.position, AiTank_FSM.targetTankPosition.transform.position) < 45f)//if the range is greater then 45 roam.
+            if(Vector3.Distance(AiTank_FSM.transform.position, AiTank_FSM.targetTankPosition.transform.position) > 45f)//if the range is greater then 45 roam.
             {
                 return typeof(RoamState_FSM_ST);
             }
